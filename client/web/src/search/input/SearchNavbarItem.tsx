@@ -4,6 +4,7 @@ import React, { useCallback, useState, useEffect } from 'react'
 
 import { Form } from '@sourcegraph/branded/src/components/Form'
 import { ActivationProps } from '@sourcegraph/shared/src/components/activation/Activation'
+import { KEYBOARD_SHORTCUT_FUZZY_FINDER } from '@sourcegraph/shared/src/keyboardShortcuts/keyboardShortcuts'
 import { SettingsCascadeProps } from '@sourcegraph/shared/src/settings/settings'
 import { TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryService'
 import { ThemeProps } from '@sourcegraph/shared/src/theme'
@@ -17,7 +18,6 @@ import {
     parseSearchURLQuery,
 } from '..'
 import { AuthenticatedUser } from '../../auth'
-import { KEYBOARD_SHORTCUT_FUZZY_FINDER } from '../../keyboardShortcuts/keyboardShortcuts'
 import { getExperimentalFeatures } from '../../util/get-experimental-features'
 import { SubmitSearchParameters } from '../helpers'
 import { useNavbarQueryState } from '../navbarSearchQueryState'

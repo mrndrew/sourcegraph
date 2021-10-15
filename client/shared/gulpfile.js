@@ -159,6 +159,8 @@ const draftV7resolver = {
  */
 async function schema() {
   const outputDirectory = path.join(__dirname, '..', 'web', 'src', 'schema')
+  const sharedOutputDirectory = path.join(__dirname, 'src', 'schema')
+
   await mkdir(outputDirectory, { recursive: true })
   const schemaDirectory = path.join(__dirname, '..', '..', 'schema')
   await Promise.all(
@@ -182,7 +184,9 @@ async function schema() {
           }),
         },
       })
+      // TODO, output to shared as well, migrate all imports.
       await writeFile(path.join(outputDirectory, `${file}.schema.d.ts`), types)
+      await writeFile(path.join(sharedOutputDirectory, `${file}.schema.d.ts`), types)
     })
   )
 }

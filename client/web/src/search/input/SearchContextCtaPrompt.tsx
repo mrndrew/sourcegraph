@@ -10,7 +10,7 @@ import { Badge } from '../../components/Badge'
 import styles from './SearchContextCtaPrompt.module.scss'
 
 export interface SearchContextCtaPromptProps extends TelemetryProps {
-    authenticatedUser: AuthenticatedUser | null
+    authenticatedUser: Pick<AuthenticatedUser, 'username' | 'tags'> | null
     hasUserAddedExternalServices: boolean
 }
 

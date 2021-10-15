@@ -3,11 +3,12 @@ import { map, publishReplay, refCount, shareReplay } from 'rxjs/operators'
 
 import { Tooltip } from '@sourcegraph/branded/src/components/tooltip/Tooltip'
 import { createExtensionHost } from '@sourcegraph/shared/src/api/extension/worker'
-import { fromObservableQueryPromise, getDocumentNode, gql } from '@sourcegraph/shared/src/graphql/graphql'
+import { ViewerSettingsResult, ViewerSettingsVariables } from '@sourcegraph/shared/src/graphql-operations'
+import { fromObservableQueryPromise, getDocumentNode } from '@sourcegraph/shared/src/graphql/graphql'
 import * as GQL from '@sourcegraph/shared/src/graphql/schema'
 import { PlatformContext } from '@sourcegraph/shared/src/platform/context'
 import { mutateSettings, updateSettings } from '@sourcegraph/shared/src/settings/edit'
-import { gqlToCascade } from '@sourcegraph/shared/src/settings/settings'
+import { gqlToCascade, viewerSettingsQuery } from '@sourcegraph/shared/src/settings/settings'
 import { createAggregateError, asError } from '@sourcegraph/shared/src/util/errors'
 import { LocalStorageSubject } from '@sourcegraph/shared/src/util/LocalStorageSubject'
 import {
@@ -21,7 +22,6 @@ import {
 } from '@sourcegraph/shared/src/util/url'
 
 import { getWebGraphQLClient, requestGraphQL } from '../backend/graphql'
-import { ViewerSettingsResult, ViewerSettingsVariables } from '../graphql-operations'
 import { eventLogger } from '../tracking/eventLogger'
 
 /**
@@ -106,36 +106,6 @@ function mapViewerSettingsResult({ data, errors }: ApolloQueryResult<ViewerSetti
     return data.viewerSettings as GQL.ISettingsCascade
 }
 
-const settingsCascadeFragment = gql`
-    fragment SettingsCascadeFields on SettingsCascade {
-        subjects {
-            __typename
-            ... on Org {
-                id
-                name
-                displayName
-            }
-            ... on User {
-                id
-                username
-                displayName
-            }
-            ... on Site {
-                id
-                siteID
-                allowSiteSettingsEdits
-            }
-            latestSettings {
-                id
-                contents
-            }
-            settingsURL
-            viewerCanAdminister
-        }
-        final
-    }
-`
-
 /**
  * Creates Apollo query watcher for the viewer's settings. Watcher is used instead of the one-time query because we
  * want to use cached response if it's available. Callers should use settingsRefreshes#next instead of calling
@@ -146,13 +116,6 @@ async function watchViewerSettingsQuery(): Promise<ObservableQuery<ViewerSetting
     const graphQLClient = await getWebGraphQLClient()
 
     return graphQLClient.watchQuery<ViewerSettingsResult, ViewerSettingsVariables>({
-        query: getDocumentNode(gql`
-            query ViewerSettings {
-                viewerSettings {
-                    ...SettingsCascadeFields
-                }
-            }
-            ${settingsCascadeFragment}
-        `),
+        query: getDocumentNode(viewerSettingsQuery),
     })
 }

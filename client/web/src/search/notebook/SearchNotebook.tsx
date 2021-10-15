@@ -5,12 +5,12 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { ExtensionsControllerProps } from '@sourcegraph/shared/src/extensions/controller'
 import { SearchPatternType } from '@sourcegraph/shared/src/graphql/schema'
 import { fetchStreamSuggestions } from '@sourcegraph/shared/src/search/suggestions'
+import { useQueryIntelligence } from '@sourcegraph/shared/src/search/useQueryIntelligence'
 import { TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryService'
 import { ThemeProps } from '@sourcegraph/shared/src/theme'
 
 import { SearchStreamingProps } from '..'
 import { StreamingSearchResultsListProps } from '../results/StreamingSearchResultsList'
-import { useQueryIntelligence } from '../useQueryIntelligence'
 
 import styles from './SearchNotebook.module.scss'
 import { SearchNotebookAddBlockButtons } from './SearchNotebookAddBlockButtons'

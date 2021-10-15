@@ -12,6 +12,7 @@ import { ActivationProps } from '@sourcegraph/shared/src/components/activation/A
 import { Link } from '@sourcegraph/shared/src/components/Link'
 import { displayRepoName } from '@sourcegraph/shared/src/components/RepoFileLink'
 import { ExtensionsControllerProps } from '@sourcegraph/shared/src/extensions/controller'
+import { KeyboardShortcutsProps } from '@sourcegraph/shared/src/keyboardShortcuts/keyboardShortcuts'
 import { PlatformContextProps } from '@sourcegraph/shared/src/platform/context'
 import { SettingsCascadeProps, Settings } from '@sourcegraph/shared/src/settings/settings'
 import { TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryService'
@@ -23,7 +24,6 @@ import { SyntaxHighlightedSearchQuery } from '@sourcegraph/web/src/components/Sy
 
 import { AuthenticatedUser } from '../auth'
 import { SearchPatternType } from '../graphql-operations'
-import { KeyboardShortcutsProps } from '../keyboardShortcuts/keyboardShortcuts'
 import {
     PatternTypeProps,
     CaseSensitivityProps,

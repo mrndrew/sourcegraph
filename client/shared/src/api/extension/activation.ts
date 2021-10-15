@@ -321,6 +321,7 @@ export function extensionsWithMatchedActivationEvent<Extension extends Configure
     const languageActivationEvents = new Set(
         [...visibleTextDocumentLanguages].map(language => `onLanguage:${language}`)
     )
+    console.log({ languageActivationEvents })
     return enabledExtensions.filter(extension => {
         try {
             if (!extension.manifest) {

@@ -6,7 +6,10 @@ import { lazyComponent } from '../../util/lazyComponent'
 import styles from './LazyMonacoQueryInput.module.scss'
 import { MonacoQueryInputProps } from './MonacoQueryInput'
 
-const MonacoQueryInput = lazyComponent(() => import('./MonacoQueryInput'), 'MonacoQueryInput')
+const MonacoQueryInput = lazyComponent(
+    () => import('@sourcegraph/shared/src/search/input/MonacoQueryInput'),
+    'MonacoQueryInput'
+)
 
 /**
  * A plain query input displayed during lazy-loading of the MonacoQueryInput.
@@ -38,6 +41,6 @@ export const PlainQueryInput: React.FunctionComponent<
  */
 export const LazyMonacoQueryInput: React.FunctionComponent<MonacoQueryInputProps> = props => (
     <Suspense fallback={<PlainQueryInput {...props} />}>
-        <MonacoQueryInput {...props} />
+        <MonacoQueryInput {...props} className={classNames(props.className, 'flex-grow-1 flex-shrink-past-contents')} />
     </Suspense>
 )

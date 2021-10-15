@@ -8,16 +8,16 @@ import { debounceTime } from 'rxjs/operators'
 import { LoadingSpinner } from '@sourcegraph/react-loading-spinner'
 import { transformSearchQuery } from '@sourcegraph/shared/src/api/client/search'
 import { ExtensionsControllerProps } from '@sourcegraph/shared/src/extensions/controller'
+import { LATEST_VERSION } from '@sourcegraph/shared/src/search/stream'
 import { fetchStreamSuggestions } from '@sourcegraph/shared/src/search/suggestions'
+import { useQueryIntelligence, useQueryDiagnostics } from '@sourcegraph/shared/src/search/useQueryIntelligence'
 import { useObservable } from '@sourcegraph/shared/src/util/useObservable'
 
 import { MonacoEditor } from '../components/MonacoEditor'
 import { PageTitle } from '../components/PageTitle'
 import { SearchPatternType } from '../graphql-operations'
 
-import { LATEST_VERSION } from './results/StreamingSearchResults'
 import { StreamingSearchResultsList, StreamingSearchResultsListProps } from './results/StreamingSearchResultsList'
-import { useQueryIntelligence, useQueryDiagnostics } from './useQueryIntelligence'
 
 import { parseSearchURLQuery, parseSearchURLPatternType, SearchStreamingProps } from '.'
 

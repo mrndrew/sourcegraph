@@ -13,6 +13,11 @@ import { ActivationProps } from '@sourcegraph/shared/src/components/activation/A
 import { ActivationDropdown } from '@sourcegraph/shared/src/components/activation/ActivationDropdown'
 import { Link } from '@sourcegraph/shared/src/components/Link'
 import { ExtensionsControllerProps } from '@sourcegraph/shared/src/extensions/controller'
+import {
+    KeyboardShortcutsProps,
+    KEYBOARD_SHORTCUT_SHOW_COMMAND_PALETTE,
+    KEYBOARD_SHORTCUT_SWITCH_THEME,
+} from '@sourcegraph/shared/src/keyboardShortcuts/keyboardShortcuts'
 import { PlatformContextProps } from '@sourcegraph/shared/src/platform/context'
 import { omitFilter } from '@sourcegraph/shared/src/search/query/transformer'
 import { SettingsCascadeProps } from '@sourcegraph/shared/src/settings/settings'
@@ -34,11 +39,6 @@ import { CodeMonitoringLogo } from '../code-monitoring/CodeMonitoringLogo'
 import { BrandLogo } from '../components/branding/BrandLogo'
 import { CodeInsightsProps } from '../insights/types'
 import { isCodeInsightsEnabled } from '../insights/utils/is-code-insights-enabled'
-import {
-    KeyboardShortcutsProps,
-    KEYBOARD_SHORTCUT_SHOW_COMMAND_PALETTE,
-    KEYBOARD_SHORTCUT_SWITCH_THEME,
-} from '../keyboardShortcuts/keyboardShortcuts'
 import { LayoutRouteProps } from '../routes'
 import { Settings } from '../schema/settings.schema'
 import {

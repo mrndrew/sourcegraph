@@ -8,8 +8,14 @@ import { ActivationProps } from '@sourcegraph/shared/src/components/activation/A
 import { FetchFileParameters } from '@sourcegraph/shared/src/components/CodeExcerpt'
 import { ExtensionsControllerProps } from '@sourcegraph/shared/src/extensions/controller'
 import * as GQL from '@sourcegraph/shared/src/graphql/schema'
+import {
+    KeyboardShortcutsProps,
+    KEYBOARD_SHORTCUT_SHOW_HELP,
+} from '@sourcegraph/shared/src/keyboardShortcuts/keyboardShortcuts'
+import { KeyboardShortcutsHelp } from '@sourcegraph/shared/src/keyboardShortcuts/KeyboardShortcutsHelp'
 import { PlatformContextProps } from '@sourcegraph/shared/src/platform/context'
 import { SettingsCascadeProps } from '@sourcegraph/shared/src/settings/settings'
+import { useTemporarySetting } from '@sourcegraph/shared/src/settings/temporary/useTemporarySetting'
 import { TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryService'
 import { parseQueryAndHash } from '@sourcegraph/shared/src/util/url'
 import { useObservable } from '@sourcegraph/shared/src/util/useObservable'
@@ -31,8 +37,6 @@ import { FeatureFlagProps } from './featureFlags/featureFlags'
 import { GlobalAlerts } from './global/GlobalAlerts'
 import { GlobalDebug } from './global/GlobalDebug'
 import { CodeInsightsProps } from './insights/types'
-import { KeyboardShortcutsProps, KEYBOARD_SHORTCUT_SHOW_HELP } from './keyboardShortcuts/keyboardShortcuts'
-import { KeyboardShortcutsHelp } from './keyboardShortcuts/KeyboardShortcutsHelp'
 import { SurveyToast } from './marketing/SurveyToast'
 import { GlobalNavbar } from './nav/GlobalNavbar'
 import { useExtensionAlertAnimation } from './nav/UserNavItem'
@@ -58,7 +62,6 @@ import {
     SearchContextProps,
     getGlobalSearchContextFilter,
 } from './search'
-import { useTemporarySetting } from './settings/temporary/useTemporarySetting'
 import { SiteAdminAreaRoute } from './site-admin/SiteAdminArea'
 import { SiteAdminSideBarGroups } from './site-admin/SiteAdminSidebar'
 import { useTheme } from './theme'

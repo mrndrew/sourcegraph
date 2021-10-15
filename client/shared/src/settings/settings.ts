@@ -1,5 +1,6 @@
 import { cloneDeep, isFunction } from 'lodash'
 
+import { gql } from '../graphql/graphql'
 import * as GQL from '../graphql/schema'
 import { createAggregateError, ErrorLike, isErrorLike } from '../util/errors'
 import { parseJSONCOrError } from '../util/jsonc'
@@ -265,3 +266,42 @@ export function isSettingsValid<S extends Settings>(
 export interface SettingsCascadeProps<S extends Settings = Settings> {
     settingsCascade: SettingsCascadeOrError<S>
 }
+
+const settingsCascadeFragment = gql`
+    fragment SettingsCascadeFields on SettingsCascade {
+        subjects {
+            __typename
+            ... on Org {
+                id
+                name
+                displayName
+            }
+            ... on User {
+                id
+                username
+                displayName
+            }
+            ... on Site {
+                id
+                siteID
+                allowSiteSettingsEdits
+            }
+            latestSettings {
+                id
+                contents
+            }
+            settingsURL
+            viewerCanAdminister
+        }
+        final
+    }
+`
+
+export const viewerSettingsQuery = gql`
+    query ViewerSettings {
+        viewerSettings {
+            ...SettingsCascadeFields
+        }
+    }
+    ${settingsCascadeFragment}
+`

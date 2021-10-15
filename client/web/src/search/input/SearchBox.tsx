@@ -2,13 +2,14 @@ import classNames from 'classnames'
 import React from 'react'
 
 import { KeyboardShortcut } from '@sourcegraph/shared/src/keyboardShortcuts'
+import { QueryState } from '@sourcegraph/shared/src/search/helpers'
 import { SettingsCascadeProps } from '@sourcegraph/shared/src/settings/settings'
 import { TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryService'
 import { ThemeProps } from '@sourcegraph/shared/src/theme'
 
 import { SearchContextInputProps } from '..'
 import { AuthenticatedUser } from '../../auth'
-import { QueryState, SubmitSearchProps } from '../helpers'
+import { SubmitSearchProps } from '../helpers'
 
 import { LazyMonacoQueryInput } from './LazyMonacoQueryInput'
 import styles from './SearchBox.module.scss'

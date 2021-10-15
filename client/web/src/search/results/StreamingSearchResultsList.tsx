@@ -104,7 +104,7 @@ export const StreamingSearchResultsList: React.FunctionComponent<StreamingSearch
             settingsCascade,
         ]
     )
-
+    console.log({ results })
     return (
         <>
             <VirtualList<SearchMatch>
@@ -122,6 +122,7 @@ export const StreamingSearchResultsList: React.FunctionComponent<StreamingSearch
     )
 }
 
+// TODO(tj) move to shared
 function getFileMatchIcon(result: ContentMatch | SymbolMatch | PathMatch): React.ComponentType<{ className?: string }> {
     switch (result.type) {
         case 'content':

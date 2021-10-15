@@ -4,6 +4,7 @@ import FormatLetterCaseIcon from 'mdi-react/FormatLetterCaseIcon'
 import RegexIcon from 'mdi-react/RegexIcon'
 import React, { useCallback } from 'react'
 
+import { KEYBOARD_SHORTCUT_COPY_FULL_QUERY } from '@sourcegraph/shared/src/keyboardShortcuts/keyboardShortcuts'
 import { appendContextFilter } from '@sourcegraph/shared/src/search/query/transformer'
 import { findFilter, FilterKind } from '@sourcegraph/shared/src/search/query/validate'
 import { SettingsCascadeProps } from '@sourcegraph/shared/src/settings/settings'
@@ -11,7 +12,6 @@ import { isErrorLike } from '@sourcegraph/shared/src/util/errors'
 
 import { PatternTypeProps, CaseSensitivityProps, SearchContextProps } from '../..'
 import { SearchPatternType } from '../../../graphql-operations'
-import { KEYBOARD_SHORTCUT_COPY_FULL_QUERY } from '../../../keyboardShortcuts/keyboardShortcuts'
 import { isMacPlatform } from '../../../util'
 import { SubmitSearchProps } from '../../helpers'
 

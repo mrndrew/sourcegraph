@@ -6,7 +6,9 @@ import { extensionsAreaHeaderActionButtons } from './extensions/extensionsAreaHe
 import { extensionsAreaRoutes } from './extensions/routes'
 import './SourcegraphWebApp.scss'
 import { ExtensionViewsSection } from './insights/sections/ExtenstionViewsSection'
-import { KEYBOARD_SHORTCUTS } from './keyboardShortcuts/keyboardShortcuts'
+
+import { KEYBOARD_SHORTCUTS } from '@sourcegraph/shared/src/keyboardShortcuts/keyboardShortcuts'
+
 import { orgAreaHeaderNavItems } from './org/area/navitems'
 import { orgAreaRoutes } from './org/area/routes'
 import { repoHeaderActionButtons } from './repo/repoHeaderActionButtons'

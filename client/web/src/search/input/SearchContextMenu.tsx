@@ -69,7 +69,7 @@ export interface SearchContextMenuProps
         | 'hasUserAddedRepositories'
         | 'hasUserAddedExternalServices'
     > {
-    authenticatedUser: AuthenticatedUser | null
+    authenticatedUser: Pick<AuthenticatedUser, 'id' | 'organizations'> | null
     closeMenu: () => void
     selectSearchContextSpec: (spec: string) => void
 }

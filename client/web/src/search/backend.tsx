@@ -79,7 +79,9 @@ export function fetchAutoDefinedSearchContexts(): Observable<
     )
 }
 
-export function getUserSearchContextNamespaces(authenticatedUser: AuthenticatedUser | null): Maybe<Scalars['ID']>[] {
+export function getUserSearchContextNamespaces(
+    authenticatedUser: Pick<AuthenticatedUser, 'id' | 'organizations'> | null
+): Maybe<Scalars['ID']>[] {
     return authenticatedUser
         ? [null, authenticatedUser.id, ...authenticatedUser.organizations.nodes.map(org => org.id)]
         : [null]

@@ -3,6 +3,7 @@ import * as H from 'history'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Observable } from 'rxjs'
 
+import { SearchSidebar } from '@sourcegraph/branded/src/search/results/sidebar/SearchSidebar'
 import { ActivationProps } from '@sourcegraph/shared/src/components/activation/Activation'
 import { FetchFileParameters } from '@sourcegraph/shared/src/components/CodeExcerpt'
 import { Link } from '@sourcegraph/shared/src/components/Link'
@@ -11,7 +12,7 @@ import { SearchPatternType } from '@sourcegraph/shared/src/graphql-operations'
 import { PlatformContextProps } from '@sourcegraph/shared/src/platform/context'
 import { collectMetrics } from '@sourcegraph/shared/src/search/query/metrics'
 import { sanitizeQueryForTelemetry, updateFilters } from '@sourcegraph/shared/src/search/query/transformer'
-import { StreamSearchOptions } from '@sourcegraph/shared/src/search/stream'
+import { StreamSearchOptions, LATEST_VERSION } from '@sourcegraph/shared/src/search/stream'
 import { SettingsCascadeProps } from '@sourcegraph/shared/src/settings/settings'
 import { TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryService'
 import { ThemeProps } from '@sourcegraph/shared/src/theme'
@@ -33,13 +34,14 @@ import { isCodeInsightsEnabled } from '../../insights/utils/is-code-insights-ena
 import { SavedSearchModal } from '../../savedSearches/SavedSearchModal'
 import { SearchBetaIcon } from '../CtaIcons'
 import { getSubmittedSearchesCount, submitSearch } from '../helpers'
+import { useNavbarQueryState } from '../navbarSearchQueryState'
 
 import { DidYouMean } from './DidYouMean'
 import { StreamingProgress } from './progress/StreamingProgress'
 import { SearchAlert } from './SearchAlert'
 import { useCachedSearchResults } from './SearchResultsCacheProvider'
 import { SearchResultsInfoBar } from './SearchResultsInfoBar'
-import { SearchSidebar } from './sidebar/SearchSidebar'
+import { getRevisions } from './sidebar/Revisions'
 import styles from './StreamingSearchResults.module.scss'
 import { StreamingSearchResultsList } from './StreamingSearchResultsList'
 
@@ -65,14 +67,6 @@ export interface StreamingSearchResultsProps
 
     fetchHighlightedFileLineRanges: (parameters: FetchFileParameters, force?: boolean) => Observable<string[][]>
 }
-
-/** All values that are valid for the `type:` filter. `null` represents default code search. */
-export type SearchType = 'file' | 'repo' | 'path' | 'symbol' | 'diff' | 'commit' | null
-
-// The latest supported version of our search syntax. Users should never be able to determine the search version.
-// The version is set based on the release tag of the instance. Anything before 3.9.0 will not pass a version parameter,
-// and will therefore default to V1.
-export const LATEST_VERSION = 'V2'
 
 export const StreamingSearchResults: React.FunctionComponent<StreamingSearchResultsProps> = props => {
     const {
@@ -233,6 +227,8 @@ export const StreamingSearchResults: React.FunctionComponent<StreamingSearchResu
                     showSidebar && styles.streamingSearchResultsSidebarShow
                 )}
                 filters={results?.filters}
+                useQueryState={useNavbarQueryState}
+                getRevisions={getRevisions}
             />
 
             <SearchResultsInfoBar

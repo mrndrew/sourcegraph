@@ -171,6 +171,7 @@ export const resolveRevision = memoizeObservable(
     makeRepoURI
 )
 
+// TODO(tj): remove and use shared impl everywhere
 /**
  * Fetches the specified highlighted file line ranges (`FetchFileParameters.ranges`) and returns
  * them as a list of ranges, each describing a list of lines in the form of HTML table '<tr>...</tr>'.
