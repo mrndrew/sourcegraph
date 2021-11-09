@@ -1661,7 +1661,9 @@ type Repository struct {
 	StargazerCount int `json:",omitempty"`
 	ForkCount      int `json:",omitempty"`
 
-	// public or private or internal.
+	// This is available for GitHub Enterprise Cloud and GitHub Enterprise Server 2.20+ and is used
+	// to identify if a repository is public or private or internal.
+	// https://developer.github.com/changes/2019-12-03-internal-visibility-changes/#repository-visibility-fields
 	Visibility Visibility `json:",omitempty"`
 }
 
