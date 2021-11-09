@@ -387,6 +387,9 @@ func (p *Provider) FetchRepoPerms(ctx context.Context, repo *extsvc.Repository, 
 		return userIDs, nil
 	}
 
+	// TODO: Check if repo is internal
+	// Return userIDs (all users in org)
+
 	// Get groups affiliated with this repo.
 	groups, err := p.getRepoAffiliatedGroups(ctx, owner, name, opts)
 	if err != nil {
