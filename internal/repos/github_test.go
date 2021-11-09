@@ -85,6 +85,7 @@ func TestGithubSource_GetRepo(t *testing.T) {
 						URL:            "https://github.com/sourcegraph/sourcegraph",
 						StargazerCount: 2220,
 						ForkCount:      164,
+						Visibility:     "public",
 					},
 				}
 
