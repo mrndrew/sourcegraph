@@ -668,7 +668,7 @@ func (r *searchResolver) toSearchInputs(q query.Q) (*search.TextParameters, []ru
 					UseFullDeadline: args.UseFullDeadline,
 				}
 
-				jobs = append(jobs, &unindexed.TextSearch{
+				jobs = append(jobs, &unindexed.RepoSubsetTextSearch{
 					ZoektArgs:         zoektArgs,
 					SearcherArgs:      searcherArgs,
 					FileMatchLimit:    args.PatternInfo.FileMatchLimit,
@@ -1762,7 +1762,7 @@ func (r *searchResolver) doResults(ctx context.Context, args *search.TextParamet
 			return waitGroup(args.ResultTypes.Without(result.TypeCommit) == 0)
 		case "Symbol":
 			return waitGroup(args.ResultTypes.Without(result.TypeSymbol) == 0)
-		case "Text":
+		case "RepoSubsetText":
 			return waitGroup(true)
 		case "Structural":
 			return waitGroup(true)

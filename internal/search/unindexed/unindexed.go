@@ -303,7 +303,7 @@ func callSearcherOverRepos(
 	return g.Wait()
 }
 
-type TextSearch struct {
+type RepoSubsetTextSearch struct {
 	ZoektArgs         *search.ZoektParameters
 	SearcherArgs      *search.SearcherParameters
 	FileMatchLimit    int32
@@ -313,7 +313,7 @@ type TextSearch struct {
 	OnMissingRepoRevs zoektutil.OnMissingRepoRevs
 }
 
-func (t *TextSearch) Run(ctx context.Context, stream streaming.Sender, repos []*search.RepositoryRevisions) error {
+func (t *RepoSubsetTextSearch) Run(ctx context.Context, stream streaming.Sender, repos []*search.RepositoryRevisions) error {
 	ctx, stream, cleanup := streaming.WithLimit(ctx, stream, int(t.FileMatchLimit))
 	defer cleanup()
 
@@ -330,6 +330,6 @@ func (t *TextSearch) Run(ctx context.Context, stream streaming.Sender, repos []*
 	return SearchFilesInRepos(ctx, request, t.SearcherArgs, t.NotSearcherOnly, stream)
 }
 
-func (*TextSearch) Name() string {
-	return "Text"
+func (*RepoSubsetTextSearch) Name() string {
+	return "RepoSubsetText"
 }
