@@ -1660,6 +1660,9 @@ type Repository struct {
 	// Metadata retained for ranking
 	StargazerCount int `json:",omitempty"`
 	ForkCount      int `json:",omitempty"`
+
+	// public or private or internal.
+	Visibility Visibility `json:",omitempty"`
 }
 
 func ownerNameCacheKey(owner, name string) string       { return "0:" + owner + "/" + name }
@@ -1731,6 +1734,7 @@ type restRepository struct {
 	Permissions restRepositoryPermissions `json:"permissions"`
 	Stars       int                       `json:"stargazers_count"`
 	Forks       int                       `json:"forks_count"`
+	Visibility  string                    `json:"visibility"`
 }
 
 // getRepositoryFromAPI attempts to fetch a repository from the GitHub API without use of the redis cache.
@@ -1766,6 +1770,7 @@ func convertRestRepo(restRepo restRepository) *Repository {
 		ViewerPermission: convertRestRepoPermissions(restRepo.Permissions),
 		StargazerCount:   restRepo.Stars,
 		ForkCount:        restRepo.Forks,
+		Visibility:       Visibility(restRepo.Visibility),
 	}
 }
 
@@ -1793,9 +1798,10 @@ var ErrBatchTooLarge = errors.New("requested batch of GitHub repositories too la
 type Visibility string
 
 const (
-	VisibilityAll     Visibility = "all"
-	VisibilityPublic  Visibility = "public"
-	VisibilityPrivate Visibility = "private"
+	VisibilityAll      Visibility = "all"
+	VisibilityPublic   Visibility = "public"
+	VisibilityPrivate  Visibility = "private"
+	VisibilityInternal Visibility = "internal"
 )
 
 // RepositoryAffiliation is the affiliation filter for listing repositories.
