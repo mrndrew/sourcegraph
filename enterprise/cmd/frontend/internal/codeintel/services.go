@@ -12,6 +12,7 @@ import (
 
 	"github.com/sourcegraph/sourcegraph/enterprise/internal/codeintel/autoindex/enqueuer"
 	"github.com/sourcegraph/sourcegraph/enterprise/internal/codeintel/gitserver"
+	"github.com/sourcegraph/sourcegraph/enterprise/internal/codeintel/repoupdater"
 	store "github.com/sourcegraph/sourcegraph/enterprise/internal/codeintel/stores/dbstore"
 	"github.com/sourcegraph/sourcegraph/enterprise/internal/codeintel/stores/lsifstore"
 	"github.com/sourcegraph/sourcegraph/enterprise/internal/codeintel/stores/uploadstore"
@@ -71,9 +72,10 @@ func NewServices(ctx context.Context, siteConfig conftypes.SiteConfigQuerier, db
 
 	// Initialize gitserver client
 	gitserverClient := gitserver.New(dbStore, observationContext)
+	repoUpdaterClient := repoupdater.New(observationContext)
 
 	// Initialize the index enqueuer
-	indexEnqueuer := enqueuer.NewIndexEnqueuer(&enqueuer.DBStoreShim{Store: dbStore}, gitserverClient, repoupdater.DefaultClient, config.AutoIndexEnqueuerConfig, observationContext)
+	indexEnqueuer := enqueuer.NewIndexEnqueuer(&enqueuer.DBStoreShim{Store: dbStore}, gitserverClient, repoUpdaterClient, config.AutoIndexEnqueuerConfig, observationContext)
 
 	return &Services{
 		dbStore:     dbStore,
