@@ -34,6 +34,7 @@ import { authenticatedUser, AuthenticatedUser } from './auth'
 import { getWebGraphQLClient } from './backend/graphql'
 import { BatchChangesProps, isBatchChangesExecutionEnabled } from './batches'
 import { CodeIntelligenceProps } from './codeintel'
+import { CommandBar } from './components/CommandBar'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { queryExternalServices } from './components/externalServices/backend'
 import { FeedbackText } from './components/FeedbackText'
@@ -509,6 +510,7 @@ export class SourcegraphWebApp extends React.Component<SourcegraphWebAppProps, S
                                             </CodeHostScopeProvider>
                                         )}
                                     />
+                                    <CommandBar authenticatedUser={authenticatedUser} />
                                 </Router>
                                 <Tooltip key={1} />
                                 <Notifications

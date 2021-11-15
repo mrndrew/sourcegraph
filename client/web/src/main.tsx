@@ -7,10 +7,13 @@ import '@sourcegraph/shared/src/polyfills'
 
 import './sentry/init'
 
+import { init } from 'commandbar'
 import React from 'react'
 import { render } from 'react-dom'
 
 import { OpenSourceWebApp } from './OpenSourceWebApp'
+
+init('b1e1b5e4')
 
 // It's important to have a root component in a separate file to create a react-refresh boundary and avoid page reload.
 // https://github.com/pmmmwh/react-refresh-webpack-plugin/blob/main/docs/TROUBLESHOOTING.md#edits-always-lead-to-full-reload
