@@ -21,6 +21,71 @@ interface Props {
     authenticatedUser: AuthenticatedUser
 }
 
+const addCommands = (): void => {
+    window.CommandBar.addCommand({
+        text: 'Open file',
+        name: 'open_file',
+        arguments: {
+            file: {
+                type: 'context',
+                value: 'files',
+                order_key: 1,
+                label: 'Select from the list below',
+                id: 'Z6iUKqXDTa4LRaV4imgNx',
+            },
+        },
+        template: {
+            type: 'callback',
+            value: 'goToFile',
+            operation: 'self',
+        },
+    })
+
+    window.CommandBar.addCommand({
+        text: 'Go to Extensions',
+        name: 'go_to_extensions',
+        arguments: {},
+        template: {
+            type: 'callback',
+            value: 'goToExtensions',
+            operation: 'router',
+        },
+    })
+
+    window.CommandBar.addCommand({
+        text: 'Go to Settings',
+        name: 'go_to_settings',
+        arguments: {},
+        template: {
+            type: 'callback',
+            value: 'goToSettings',
+            operation: 'router',
+        },
+    })
+
+    window.CommandBar.addCommand({
+        text: 'Go to Repositories',
+        name: 'go_to_repositories',
+        arguments: {},
+        template: {
+            type: 'callback',
+            value: 'goToRepositories',
+            operation: 'router',
+        },
+    })
+
+    window.CommandBar.addCommand({
+        text: 'Go to Saved Searches',
+        name: 'go_to_saved_searches',
+        arguments: {},
+        template: {
+            type: 'callback',
+            value: 'goToSavedSearches',
+            operation: 'router',
+        },
+    })
+}
+
 export const CommandBar = ({ authenticatedUser }: Props) => {
     const history = useHistory()
 
@@ -28,6 +93,7 @@ export const CommandBar = ({ authenticatedUser }: Props) => {
 
     useEffect((): void => {
         window.CommandBar.boot('command-user')
+        addCommands()
     }, [])
 
     useEffect(() => {
@@ -49,6 +115,10 @@ export const CommandBar = ({ authenticatedUser }: Props) => {
         window.CommandBar.addCallback('goToSavedSearches', () => {
             history.push(`${authenticatedUser.url}/searches`)
         })
+
+        window.CommandBar.addCallback('goToExtensions', () => {
+            history.push('/extensions')
+        })
     }, [history])
 
     useEffect(() => {
@@ -61,6 +131,12 @@ export const CommandBar = ({ authenticatedUser }: Props) => {
         const repo = repoName.replace('.', '\\.')
 
         window.CommandBar.addContext('files', [], {
+            renderOptions: {
+                labelKey: 'name',
+            },
+            quickFindOptions: {
+                quickFind: true,
+            },
             searchOptions: {
                 searchFunction: (query: string): any => {
                     const fullQuery = `repo:^${repo}$ file:${query} type:path count:50`
