@@ -1,0 +1,165 @@
+import * as H from 'history'
+import { map, take } from 'rxjs/operators'
+
+import { appendContextFilter } from '@sourcegraph/shared/src/search/query/transformer'
+import { fetchStreamSuggestions } from '@sourcegraph/shared/src/search/suggestions'
+
+import { AuthenticatedUser } from '../../auth'
+
+import { ContextKeys } from './contextKeys'
+import { formatFile, FormattedFileSearchMatch } from './formatters/file'
+
+/**
+ * Boot up CommandBar with the user identified.
+ *
+ * Documentation: https://www.commandbar.com/sdk#boot
+ */
+export const bootCommandBar = (userId: string = 'command-user') => {
+    window.CommandBar.boot(userId)
+}
+
+/**
+ * Make CommandBar unavailable to the user.
+ *
+ * Documentation: https://www.commandbar.com/sdk#shutdown
+ */
+export const shutDownCommandBar = () => {
+    window.CommandBar.shutdown()
+}
+
+/**
+ * Setup context
+ * Context is a store that lives on the browser
+ * Data passed to context can be used to customize commands. All data stays local.
+ *
+ * Documentation: https://www.commandbar.com/docs/context/overview
+ */
+export const addFilesContext = (repo: string) => {
+    window.CommandBar.addContext('files', [], {
+        renderOptions: {
+            labelKey: 'name',
+        },
+        quickFindOptions: {
+            quickFind: true,
+        },
+        searchOptions: {
+            searchFunction: (query: string): any => {
+                const fullQuery = `repo:^${repo}$ file:${query} type:path count:50`
+
+                return new Promise(resolve => {
+                    fetchStreamSuggestions(appendContextFilter(fullQuery, undefined))
+                        .pipe(
+                            map(files => files.map(formatFile)),
+                            take(1)
+                        )
+                        .subscribe(resolve)
+                })
+            },
+        },
+    })
+}
+
+/**
+ * Setup commands
+ */
+export const addOpenFileCommand = (history: H.History, repoName: string) => {
+    /**
+     * Callbacks are functions that are triggered when users select commands.
+     *
+     * Documentation: https://www.commandbar.com/docs/commands/actions/callback
+     */
+    window.CommandBar.addCallback(ContextKeys.GoToFile, ({ file }: { file: FormattedFileSearchMatch }) => {
+        history.push(`/${repoName}/-/blob/${file.path}`)
+    })
+
+    /**
+     * Commands are function that can be executed by selecting them in CommandBar or by shortcut if it's defined
+     *
+     * Documentation: https://www.commandbar.com/docs/commands/overview
+     */
+    window.CommandBar.addCommand({
+        text: 'Open file',
+        name: 'open_file',
+        arguments: {
+            file: {
+                type: 'context',
+                value: 'files',
+                order_key: 1,
+                label: 'Select from the list below',
+            },
+        },
+        template: {
+            type: 'callback',
+            value: ContextKeys.GoToFile,
+            operation: 'self',
+        },
+    })
+}
+
+export const addGoToExtensionsCommand = (history: H.History) => {
+    window.CommandBar.addCallback(ContextKeys.GoToExtensions, () => {
+        history.push('/extensions')
+    })
+
+    window.CommandBar.addCommand({
+        text: 'Go to Extensions',
+        name: 'go_to_extensions',
+        arguments: {},
+        template: {
+            type: 'callback',
+            value: ContextKeys.GoToExtensions,
+            operation: 'router',
+        },
+    })
+}
+
+export const addGoToSettingsCommand = (history: H.History, authenticatedUser: AuthenticatedUser) => {
+    window.CommandBar.addCallback(ContextKeys.GoToSettings, () => {
+        history.push(`${authenticatedUser.url}/settings`)
+    })
+
+    window.CommandBar.addCommand({
+        text: 'Go to Settings',
+        name: 'go_to_settings',
+        arguments: {},
+        template: {
+            type: 'callback',
+            value: ContextKeys.GoToSettings,
+            operation: 'router',
+        },
+    })
+}
+
+export const addGoToRepositoriesCommand = (history: H.History, authenticatedUser: AuthenticatedUser) => {
+    window.CommandBar.addCallback(ContextKeys.GoToRepositories, () => {
+        history.push(`${authenticatedUser.url}/settings/repositories`)
+    })
+
+    window.CommandBar.addCommand({
+        text: 'Go to Repositories',
+        name: 'go_to_repositories',
+        arguments: {},
+        template: {
+            type: 'callback',
+            value: ContextKeys.GoToRepositories,
+            operation: 'router',
+        },
+    })
+}
+
+export const addGoToSavedSearchesCommand = (history: H.History, authenticatedUser: AuthenticatedUser) => {
+    window.CommandBar.addCallback(ContextKeys.GoToSavedSearches, () => {
+        history.push(`${authenticatedUser.url}/searches`)
+    })
+
+    window.CommandBar.addCommand({
+        text: 'Go to Saved Searches',
+        name: 'go_to_saved_searches',
+        arguments: {},
+        template: {
+            type: 'callback',
+            value: ContextKeys.GoToSavedSearches,
+            operation: 'router',
+        },
+    })
+}
