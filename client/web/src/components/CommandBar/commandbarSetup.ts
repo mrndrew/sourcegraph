@@ -163,3 +163,25 @@ export const addGoToSavedSearchesCommand = (history: H.History, authenticatedUse
         },
     })
 }
+
+export const addCopyPermalinkCommand = () => {
+    window.CommandBar.addCommand({
+        text: 'Copy Repo Permalink',
+        name: 'copy_repo_permalink',
+        arguments: {},
+        template: {
+            type: 'callback',
+            value: ContextKeys.CopyPermalink,
+        },
+    })
+}
+
+export const addCopyPermalinkCallback = (permalink: string) => {
+    window.CommandBar.addCallback(ContextKeys.CopyPermalink, async () => {
+        await navigator.clipboard.writeText(permalink)
+    })
+}
+
+export const removeCopyPermalinkCallback = () => {
+    window.CommandBar.removeCallback(ContextKeys.CopyPermalink)
+}

@@ -3,7 +3,7 @@ import BitbucketIcon from 'mdi-react/BitbucketIcon'
 import ExportIcon from 'mdi-react/ExportIcon'
 import GithubIcon from 'mdi-react/GithubIcon'
 import GitlabIcon from 'mdi-react/GitlabIcon'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { merge, of } from 'rxjs'
 import { catchError } from 'rxjs/operators'
 
@@ -14,6 +14,7 @@ import { RevisionSpec, FileSpec } from '@sourcegraph/shared/src/util/url'
 import { useLocalStorage } from '@sourcegraph/shared/src/util/useLocalStorage'
 import { useObservable } from '@sourcegraph/shared/src/util/useObservable'
 
+import { addCopyPermalinkCallback, removeCopyPermalinkCallback } from '../../components/CommandBar/commandbarSetup'
 import { ExternalLinkFields, RepositoryFields, ExternalServiceKind } from '../../graphql-operations'
 import { eventLogger } from '../../tracking/eventLogger'
 import { fetchFileExternalLinks } from '../backend'
@@ -61,6 +62,13 @@ export const GoToCodeHostAction: React.FunctionComponent<Props & RepoHeaderConte
     const [hasPermanentlyDismissedPopup, setHasPermanentlyDismissedPopup] = useLocalStorage(
         HAS_PERMANENTLY_DISMISSED_POPUP_KEY,
         false
+    )
+
+    useEffect(
+        () => () => {
+            removeCopyPermalinkCallback()
+        },
+        []
     )
 
     // Popover won't work with dropdown
@@ -196,6 +204,8 @@ export const GoToCodeHostAction: React.FunctionComponent<Props & RepoHeaderConte
             url += `#L${props.position.line}`
         }
     }
+
+    addCopyPermalinkCallback(url)
 
     const TARGET_ID = 'go-to-code-host'
 

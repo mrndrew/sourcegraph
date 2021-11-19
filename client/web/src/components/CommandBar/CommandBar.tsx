@@ -6,6 +6,7 @@ import { AuthenticatedUser } from '../../auth'
 import { parseBrowserRepoURL } from '../../util/url'
 
 import {
+    addCopyPermalinkCommand,
     addFilesContext,
     addGoToExtensionsCommand,
     addGoToRepositoriesCommand,
@@ -43,11 +44,12 @@ export const CommandBar = ({ authenticatedUser }: Props) => {
         addGoToSettingsCommand(history, authenticatedUser)
         addGoToRepositoriesCommand(history, authenticatedUser)
         addGoToSavedSearchesCommand(history, authenticatedUser)
-    }, [history])
+        addCopyPermalinkCommand()
+    }, [])
 
     useEffect(() => {
         addOpenFileCommand(history, repoName)
-    }, [history, repoName])
+    }, [repoName])
 
     useEffect(() => {
         const repo = repoName.replace('.', '\\.')
