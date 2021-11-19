@@ -34,8 +34,10 @@ export const shutDownCommandBar = () => {
  *
  * Documentation: https://www.commandbar.com/docs/context/overview
  */
-export const addFilesContext = (repo: string) => {
-    window.CommandBar.addContext('files', [], {
+export const addFilesContext = (repoName: string) => {
+    const repo = repoName.replace('.', '\\.')
+
+    window.CommandBar.addContext(ContextKeys.Files, [], {
         renderOptions: {
             labelKey: 'name',
         },
@@ -59,19 +61,14 @@ export const addFilesContext = (repo: string) => {
     })
 }
 
+export const removeFilesContext = () => {
+    window.CommandBar.removeContext(ContextKeys.Files)
+}
+
 /**
  * Setup commands
  */
-export const addOpenFileCommand = (history: H.History, repoName: string) => {
-    /**
-     * Callbacks are functions that are triggered when users select commands.
-     *
-     * Documentation: https://www.commandbar.com/docs/commands/actions/callback
-     */
-    window.CommandBar.addCallback(ContextKeys.GoToFile, ({ file }: { file: FormattedFileSearchMatch }) => {
-        history.push(`/${repoName}/-/blob/${file.path}`)
-    })
-
+export const addOpenFileCommand = () => {
     /**
      * Commands are function that can be executed by selecting them in CommandBar or by shortcut if it's defined
      *
@@ -94,6 +91,21 @@ export const addOpenFileCommand = (history: H.History, repoName: string) => {
             operation: 'self',
         },
     })
+}
+
+export const addOpenFileCallback = (history: H.History, repoName: string) => {
+    /**
+     * Callbacks are functions that are triggered when users select commands.
+     *
+     * Documentation: https://www.commandbar.com/docs/commands/actions/callback
+     */
+    window.CommandBar.addCallback(ContextKeys.GoToFile, ({ file }: { file: FormattedFileSearchMatch }) => {
+        history.push(`/${repoName}/-/blob/${file.path}`)
+    })
+}
+
+export const removeOpenFileCallback = () => {
+    window.CommandBar.removeCallback(ContextKeys.GoToFile)
 }
 
 export const addGoToExtensionsCommand = (history: H.History) => {

@@ -36,6 +36,12 @@ import { BatchChangesProps } from '../batches'
 import { CodeIntelligenceProps } from '../codeintel'
 import { ErrorMessage } from '../components/alerts'
 import { BreadcrumbSetters, BreadcrumbsProps } from '../components/Breadcrumbs'
+import {
+    addFilesContext,
+    addOpenFileCallback,
+    removeFilesContext,
+    removeOpenFileCallback,
+} from '../components/CommandBar/commandbarSetup'
 import { ErrorBoundary } from '../components/ErrorBoundary'
 import { HeroPage } from '../components/HeroPage'
 import { ActionItemsBarProps, useWebActionItems } from '../extensions/components/ActionItemsBar'
@@ -173,6 +179,16 @@ export const RepoContainer: React.FunctionComponent<RepoContainerProps> = props 
     const { repoName, revision, rawRevision, filePath, commitRange, position, range } = parseBrowserRepoURL(
         location.pathname + location.search + location.hash
     )
+
+    useEffect(() => {
+        addFilesContext(repoName)
+        addOpenFileCallback(props.history, repoName)
+
+        return () => {
+            removeFilesContext()
+            removeOpenFileCallback()
+        }
+    }, [repoName])
 
     // Fetch repository upon mounting the component.
     const repoOrError = useObservable(
