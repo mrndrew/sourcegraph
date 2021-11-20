@@ -5,9 +5,16 @@ import { appendContextFilter } from '@sourcegraph/shared/src/search/query/transf
 import { fetchStreamSuggestions } from '@sourcegraph/shared/src/search/suggestions'
 
 import { AuthenticatedUser } from '../../auth'
+import { QuickLink } from '../../schema/settings.schema'
 
 import { ContextKeys } from './contextKeys'
 import { formatFile, FormattedFileSearchMatch } from './formatters/file'
+
+let history: H.History | undefined
+
+export const setHistory = (historyObject: H.History) => {
+    history = historyObject
+}
 
 /**
  * Boot up CommandBar with the user identified.
@@ -196,4 +203,64 @@ export const addCopyPermalinkCallback = (permalink: string) => {
 
 export const removeCopyPermalinkCallback = () => {
     window.CommandBar.removeCallback(ContextKeys.CopyPermalink)
+}
+
+export const addOpenQuickLinkCommand = () => {
+    window.CommandBar.addCommand({
+        text: 'Open quick link',
+        name: 'open_quick_link',
+        arguments: {
+            quickLink: {
+                type: 'context',
+                value: ContextKeys.QuickLinks,
+                order_key: 1,
+                label: 'Select from the list below',
+            },
+        },
+        template: {
+            type: 'callback',
+            value: ContextKeys.GoToQuickLink,
+            operation: 'self',
+        },
+    })
+}
+
+export const addQuickLinksContext = (quickLinks: QuickLink[]) => {
+    window.CommandBar.addContext(ContextKeys.QuickLinks, quickLinks, {
+        renderOptions: {
+            labelKey: 'name',
+        },
+        quickFindOptions: {
+            quickFind: true,
+        },
+        searchOptions: {
+            fields: ['name'],
+        },
+    })
+}
+
+export const removeQuickLinksContext = () => {
+    window.CommandBar.removeContext(ContextKeys.QuickLinks)
+}
+
+export const addOpenQuickLinkCallback = () => {
+    window.CommandBar.addCallback(ContextKeys.GoToQuickLink, ({ quickLink }: { quickLink: QuickLink }) => {
+        const url = new URL(quickLink.url)
+
+        history?.push(url.pathname + url.search)
+    })
+}
+
+export const removeOpenQuickLinkCallBack = () => {
+    window.CommandBar.removeCallback(ContextKeys.GoToQuickLink)
+}
+
+export const addOpenQuickLinksContextAndCallback = (quickLinks: QuickLink[]) => {
+    addQuickLinksContext(quickLinks)
+    addOpenQuickLinkCallback()
+}
+
+export const removeOpenQuickLinksContextAndCallback = () => {
+    removeQuickLinksContext()
+    removeOpenQuickLinkCallBack()
 }

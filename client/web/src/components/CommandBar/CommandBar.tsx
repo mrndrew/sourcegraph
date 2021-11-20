@@ -11,7 +11,9 @@ import {
     addGoToSavedSearchesCommand,
     addGoToSettingsCommand,
     addOpenFileCommand,
+    addOpenQuickLinkCommand,
     bootCommandBar,
+    setHistory,
     shutDownCommandBar,
 } from './commandbarSetup'
 
@@ -30,19 +32,19 @@ export const CommandBar = ({ authenticatedUser }: Props) => {
 
     useEffect(() => {
         bootCommandBar()
+        setHistory(history)
 
-        return () => {
-            shutDownCommandBar()
-        }
-    }, [])
-
-    useEffect(() => {
         addGoToExtensionsCommand(history)
         addGoToSettingsCommand(history, authenticatedUser)
         addGoToRepositoriesCommand(history, authenticatedUser)
         addGoToSavedSearchesCommand(history, authenticatedUser)
         addCopyPermalinkCommand()
         addOpenFileCommand()
+        addOpenQuickLinkCommand()
+
+        return () => {
+            shutDownCommandBar()
+        }
     }, [])
 
     return null

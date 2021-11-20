@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useHistory } from 'react-router'
 import StickyBox from 'react-sticky-box'
 import shallow from 'zustand/shallow'
@@ -9,6 +9,7 @@ import { Filter } from '@sourcegraph/shared/src/search/stream'
 import { SettingsCascadeProps } from '@sourcegraph/shared/src/settings/settings'
 import { TelemetryProps } from '@sourcegraph/shared/src/telemetry/telemetryService'
 
+import { removeOpenQuickLinksContextAndCallback } from '../../../components/CommandBar/commandbarSetup'
 import { TemporarySettings } from '../../../settings/temporary/TemporarySettings'
 import { useTemporarySetting } from '../../../settings/temporary/useTemporarySetting'
 import { useGlobalStore } from '../../../stores/global'
@@ -117,6 +118,13 @@ export const SearchSidebar: React.FunctionComponent<SearchSidebarProps> = props 
         onDynamicFilterClicked,
     ])
     const showReposSection = repoFilterLinks.length > 1
+
+    useEffect(
+        () => () => {
+            removeOpenQuickLinksContextAndCallback()
+        },
+        []
+    )
 
     let body
 

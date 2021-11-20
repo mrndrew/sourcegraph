@@ -6,4 +6,6 @@ export enum ContextKeys {
     GoToRepositories = 'goToRepositories',
     GoToSavedSearches = 'goToSavedSearches',
     CopyPermalink = 'copyPermalink',
+    QuickLinks = 'quickLinks',
+    GoToQuickLink = 'goToQuickLink',
 }

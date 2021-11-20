@@ -16,6 +16,10 @@ import {
     SearchContextInputProps,
 } from '..'
 import { AuthenticatedUser } from '../../auth'
+import {
+    addOpenQuickLinksContextAndCallback,
+    removeOpenQuickLinksContextAndCallback,
+} from '../../components/CommandBar/commandbarSetup'
 import { Notices } from '../../global/Notices'
 import { KeyboardShortcutsProps } from '../../keyboardShortcuts/keyboardShortcuts'
 import { Settings } from '../../schema/settings.schema'
@@ -66,6 +70,14 @@ export const SearchPageInput: React.FunctionComponent<Props> = (props: Props) =>
 
     const quickLinks =
         (isSettingsValid<Settings>(props.settingsCascade) && props.settingsCascade.final.quicklinks) || []
+
+    useEffect(() => {
+        addOpenQuickLinksContextAndCallback(quickLinks)
+
+        return () => {
+            removeOpenQuickLinksContextAndCallback()
+        }
+    }, [props.settingsCascade])
 
     // This component is also used on the CommunitySearchContextPage.
     // The search onboarding tour should only be shown on the homepage.

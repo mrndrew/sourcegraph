@@ -4,12 +4,14 @@ import React from 'react'
 import { Link } from '@sourcegraph/shared/src/components/Link'
 import { isSettingsValid, SettingsCascadeProps } from '@sourcegraph/shared/src/settings/settings'
 
+import { addOpenQuickLinksContextAndCallback } from '../../../components/CommandBar/commandbarSetup'
 import { Settings } from '../../../schema/settings.schema'
 
 import styles from './SearchSidebarSection.module.scss'
 
 export const getQuickLinks = (settingsCascade: SettingsCascadeProps['settingsCascade']): React.ReactElement[] => {
     const quickLinks = (isSettingsValid<Settings>(settingsCascade) && settingsCascade.final.quicklinks) || []
+    addOpenQuickLinksContextAndCallback(quickLinks)
 
     return quickLinks.map((quickLink, index) => (
         <Link
