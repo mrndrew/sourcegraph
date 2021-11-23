@@ -42,6 +42,7 @@ import {
     removeFilesContext,
     removeOpenFileCallback,
 } from '../components/CommandBar/commandbarSetup'
+import { useBranchesContext } from '../components/CommandBar/hooks/useBranchesContext'
 import { ErrorBoundary } from '../components/ErrorBoundary'
 import { HeroPage } from '../components/HeroPage'
 import { ActionItemsBarProps, useWebActionItems } from '../extensions/components/ActionItemsBar'
@@ -209,6 +210,8 @@ export const RepoContainer: React.FunctionComponent<RepoContainerProps> = props 
             [repoName]
         )
     )
+
+    useBranchesContext(!repoOrError || isErrorLike(repoOrError) ? '' : repoOrError.id)
 
     const resolvedRevisionOrError = useObservable(
         useMemo(

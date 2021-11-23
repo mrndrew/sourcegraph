@@ -10,6 +10,7 @@ import {
     addGoToRepositoriesCommand,
     addGoToSavedSearchesCommand,
     addGoToSettingsCommand,
+    addOpenBranchCommand,
     addOpenFileCommand,
     addOpenQuickLinkCommand,
     bootCommandBar,
@@ -41,6 +42,7 @@ export const CommandBar = ({ authenticatedUser }: Props) => {
         addCopyPermalinkCommand()
         addOpenFileCommand()
         addOpenQuickLinkCommand()
+        addOpenBranchCommand()
 
         return () => {
             shutDownCommandBar()

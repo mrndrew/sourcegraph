@@ -8,6 +8,7 @@ import { AuthenticatedUser } from '../../auth'
 import { QuickLink } from '../../schema/settings.schema'
 
 import { ContextKeys } from './contextKeys'
+import { FormattedBranchSearchMatch } from './formatters/branch'
 import { formatFile, FormattedFileSearchMatch } from './formatters/file'
 
 let history: H.History | undefined
@@ -263,4 +264,52 @@ export const addOpenQuickLinksContextAndCallback = (quickLinks: QuickLink[]) => 
 export const removeOpenQuickLinksContextAndCallback = () => {
     removeQuickLinksContext()
     removeOpenQuickLinkCallBack()
+}
+
+export const addOpenBranchCommand = () => {
+    window.CommandBar.addCommand({
+        text: 'Open Branch',
+        name: 'open_branch',
+        arguments: {
+            branch: {
+                type: 'context',
+                value: ContextKeys.Branches,
+                order_key: 1,
+                label: 'Select from the list below',
+            },
+        },
+        template: {
+            type: 'callback',
+            value: ContextKeys.GoToBranch,
+            operation: 'blank',
+        },
+    })
+}
+
+export const addOpenBranchCallback = () => {
+    window.CommandBar.addCallback(ContextKeys.GoToBranch, ({ branch }: { branch: FormattedBranchSearchMatch }) => {
+        history?.push(branch.url)
+    })
+}
+
+export const removeOpenBranchCallback = () => {
+    window.CommandBar.removeCallback(ContextKeys.GoToBranch)
+}
+
+export const addBranchesContext = (searchFunction: (query: string) => Promise<FormattedBranchSearchMatch[]>) => {
+    window.CommandBar.addContext(ContextKeys.Branches, [], {
+        renderOptions: {
+            labelKey: 'name',
+        },
+        quickFindOptions: {
+            quickFind: true,
+        },
+        searchOptions: {
+            searchFunction,
+        },
+    })
+}
+
+export const removeBranchesContext = () => {
+    window.CommandBar.removeContext(ContextKeys.Branches)
 }

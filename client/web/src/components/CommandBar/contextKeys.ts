@@ -8,4 +8,6 @@ export enum ContextKeys {
     CopyPermalink = 'copyPermalink',
     QuickLinks = 'quickLinks',
     GoToQuickLink = 'goToQuickLink',
+    GoToBranch = 'goToBranch',
+    Branches = 'branches',
 }
